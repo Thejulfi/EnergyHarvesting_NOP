@@ -17,6 +17,7 @@ Uno et Mega sont en 0 - 5V.
 
 #include <Wire.h>
 #include <LIS3MDL.h>
+
 #include <RunningMedian.h>
 
 #define LED RED_LED
@@ -56,6 +57,7 @@ void setup()
 
 void loop()
 {
+  int offset = 2005;
   //Lecture des registres de sortie en I2C
   mag1.read();
   mag2.read();
@@ -74,7 +76,8 @@ void loop()
 //7.8 : 7.8mA/uT
 //68.42 : Passage de gauss a uT
 
-  mes = ((((2005+mag1.m.z)-mag2.m.z)/2)*7.1)/68.42;
+  //mes = ((((2005+mag1.m.z)-mag2.m.z)/2)*7.1)/68.42;
+  mes = (((((offset+mag1.m.z)-mag2.m.z)/2)*400) * 0.0005)/(2*pow(10,-7));
 
   //Ajout de l'echantillon a la moyenne glissante
   samples.add(mes);
