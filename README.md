@@ -1,5 +1,5 @@
 # EnergyHarvesting_NOP
-Projet technique ETN5 SETR Polytech Nante
+Technical project in my 5th year in my Master of Science in Electronics and digital technologies at Polytech Nantes.
 
 # Installation
 
