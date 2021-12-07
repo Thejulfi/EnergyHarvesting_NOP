@@ -38,7 +38,7 @@ void setup()
 
   while (!mag1.init(LIS3MDL::device_auto, LIS3MDL::sa1_high));//Mag plus proche de l'inductance
   while (!mag2.init(LIS3MDL::device_auto, LIS3MDL::sa1_low));
-
+  
   mag1.enableDefault();
   mag1.writeReg(LIS3MDL::CTRL_REG1, 0x00);//X et Y en Low Power
   mag1.writeReg(LIS3MDL::CTRL_REG3, 0x01);//Configuration Low Power, Single conversion
@@ -57,7 +57,7 @@ void setup()
 
 void loop()
 {
-  int offset = 2005;
+  int offset = 0;
   //Lecture des registres de sortie en I2C
   mag1.read();
   mag2.read();
@@ -75,25 +75,25 @@ void loop()
 //2005 : Correction d'offset
 //7.8 : 7.8mA/uT
 //68.42 : Passage de gauss a uT
-
+  float r = 0.5;
   //mes = ((((2005+mag1.m.z)-mag2.m.z)/2)*7.1)/68.42;
-  mes = (((((offset+mag1.m.z)-mag2.m.z)/2)*400) * 0.0005)/(2*pow(10,-7));
-
-  //Ajout de l'echantillon a la moyenne glissante
-  samples.add(mes);
+  //mes = ((((mag1.m.z)-mag2.m.z)/2)*7.1)/68.42;
+  //mes = (((((offset+mag1.m.z)-mag2.m.z)/2)*400) * 0.0005)/(2*pow(10,-7));
+  mes = ((offset+mag1.m.z)-mag2.m.z)*r*0.036539;
 
   //Affichage de la moyenne
-  Serial.print(samples.getAverage());
+  Serial.print(mes);
   Serial.println(" mA");
 
   //Lancement de mesure
   mag1.writeReg(mag1.CTRL_REG3, 0x01);
   mag2.writeReg(mag1.CTRL_REG3, 0x01);
   digitalWrite(LED, HIGH);
+  delay(500);
 
-  delay(500);
-  digitalWrite(LED, LOW);
-  delay(500);
+  //delay(500);
+  //digitalWrite(LED, LOW);
+
 
 
 }
