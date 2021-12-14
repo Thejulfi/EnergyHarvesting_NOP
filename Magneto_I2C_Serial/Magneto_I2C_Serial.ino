@@ -25,6 +25,13 @@ Uno et Mega sont en 0 - 5V.
 LIS3MDL mag1; 
 LIS3MDL mag2;
 
+unsigned long currentTime=0;
+unsigned long previousTime=0;
+unsigned long interval,interval1=200, interval2=2000;
+
+bool ledState=LOW;
+
+
 RunningMedian samples = RunningMedian(7);
 
 float mes = 0;
@@ -33,7 +40,7 @@ char report[80];
 void setup()
 {
   Serial.begin(9600);
-  Serial.println("hello world");
+  //Serial.println("hello world");
   Wire.begin();
 
   while (!mag1.init(LIS3MDL::device_auto, LIS3MDL::sa1_high));//Mag plus proche de l'inductance
@@ -55,7 +62,7 @@ void setup()
 
 }
 
-void loop()
+void displaying_led_infos()
 {
   int offset = 0;
   //Lecture des registres de sortie en I2C
@@ -69,30 +76,44 @@ void loop()
 
   //Affichage en serial
   
-  Serial.println(report);
+  //Serial.println(report);
 
 
-//2005 : Correction d'offset
-//7.8 : 7.8mA/uT
-//68.42 : Passage de gauss a uT
+  //2005 : Correction d'offset
+  //7.8 : 7.8mA/uT
+  //68.42 : Passage de gauss a uT
   float r = 0.5;
   //mes = ((((2005+mag1.m.z)-mag2.m.z)/2)*7.1)/68.42;
   //mes = ((((mag1.m.z)-mag2.m.z)/2)*7.1)/68.42;
   //mes = (((((offset+mag1.m.z)-mag2.m.z)/2)*400) * 0.0005)/(2*pow(10,-7));
   mes = ((offset+mag1.m.z)-mag2.m.z)*r*0.036539;
 
-  //Affichage de la moyenne
-  Serial.print(mes);
-  Serial.println(" mA");
+  samples.add(mes);
+  // Affichage de la moyenne
+  Serial.println(samples.getAverage());
+  //Serial.println(" mA");
 
   //Lancement de mesure
   mag1.writeReg(mag1.CTRL_REG3, 0x01);
   mag2.writeReg(mag1.CTRL_REG3, 0x01);
-  digitalWrite(LED, HIGH);
-  delay(500);
+}
 
-  //delay(500);
-  //digitalWrite(LED, LOW);
+void loop(){
+
+  
+
+  currentTime=millis();
+  
+  if((currentTime-previousTime)>5000){
+    
+    previousTime=currentTime;
+    
+    ledState=!ledState;
+    
+    digitalWrite(LED,!ledState);
+  }else if((currentTime-previousTime)%20 == 0){
+    displaying_led_infos();
+  }
 
 
 
