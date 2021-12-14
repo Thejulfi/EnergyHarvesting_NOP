@@ -43,7 +43,7 @@ void init_UART(void){
     // Baud Rate calculation
     // 10000000/(115200) = 8.68
     // Fractional portion = 0.68
-    // User's Guide Table 21-4: UCBRSx = 0xD600
+    // MSP430FRxx Family guide Table 30-4: UCBRSx = 0xD600
     UCA0BR0 = 8;                              // Prescaler : 8000000/115200
     UCA0MCTLW |= 0xD600;                      // Modulation
     UCA0CTLW0 &= ~UCSWRST;                    //Take eUSC0 out of SW reset with UCA0CTLW0 = 0
