@@ -1,7 +1,7 @@
 ******************************************************************************
                   MSP430 Linker Unix v21.6.0                   
 ******************************************************************************
->> Linked Tue Dec 14 18:43:34 2021
+>> Linked Tue Dec 14 18:56:52 2021
 
 OUTPUT FILE NAME:   <UART_Hello_world_MSP430.out>
 ENTRY POINT SYMBOL: "_c_int00_noinit_noargs"  address: 00004400
@@ -79,7 +79,7 @@ MEMORY CONFIGURATION
   INT53                 0000fffa   00000002  00000002  00000000  RWIX
   INT54                 0000fffc   00000002  00000002  00000000  RWIX
   RESET                 0000fffe   00000002  00000002  00000000  RWIX
-  FRAM2                 00010000   00003ff8  000000be  00003f3a  RWIX
+  FRAM2                 00010000   00003ff8  000000c4  00003f34  RWIX
 
 
 SECTION ALLOCATION MAP
@@ -224,20 +224,21 @@ SYSNMI     0    0000fffc    00000002
 .const     0    0000441c    0000000d     
                   0000441c    0000000d     main.obj (.const:.string:$P$T0$1)
 
-.text      0    00010000    000000be     
-                  00010000    000000a0     main.obj (.text:main)
-                  000100a0    00000014     rts430x_lc_rd_eabi.lib : memcpy.c.obj (.text:memcpy)
-                  000100b4    00000006                            : exit.c.obj (.text:abort)
-                  000100ba    00000004                            : pre_init.c.obj (.text:_system_pre_init)
+.text      0    00010000    000000c4     
+                  00010000    0000005c     main.obj (.text:main)
+                  0001005c    0000004a     main.obj (.text:init_UART)
+                  000100a6    00000014     rts430x_lc_rd_eabi.lib : memcpy.c.obj (.text:memcpy)
+                  000100ba    00000006                            : exit.c.obj (.text:abort)
+                  000100c0    00000004                            : pre_init.c.obj (.text:_system_pre_init)
 
 MODULE SUMMARY
 
        Module             code   ro data   rw data
        ------             ----   -------   -------
     ./
-       main.obj           160    13        0      
+       main.obj           166    13        0      
     +--+------------------+------+---------+---------+
-       Total:             160    13        0      
+       Total:             166    13        0      
                                                   
     /Applications/ti/ccs1100/ccs/tools/compiler/ti-cgt-msp430_21.6.0.LTS/lib/rts430x_lc_rd_eabi.lib
        boot.c.obj         20     2         0      
@@ -275,7 +276,7 @@ MODULE SUMMARY
                                                   
        Stack:             0      0         160    
     +--+------------------+------+---------+---------+
-       Grand Total:       218    65        160    
+       Grand Total:       224    65        160    
 
 
 GLOBAL SYMBOLS: SORTED ALPHABETICALLY BY Name 
@@ -539,7 +540,7 @@ address   name
 000009ce  AESAXIN_L             
 000004be  BCD2BIN               
 000004bc  BIN2BCD               
-000100b4  C$$EXIT               
+000100ba  C$$EXIT               
 0000043e  CAPTIO0CTL            
 0000043f  CAPTIO0CTL_H          
 0000043e  CAPTIO0CTL_L          
@@ -1100,14 +1101,15 @@ ffffffff  __c_args__
 00004400  _c_int00_noinit_noargs
 0000fffe  _reset_vector         
 00002360  _stack                
-000100ba  _system_pre_init      
-000100b4  abort                 
+000100c0  _system_pre_init      
+000100ba  abort                 
 00004400  fram_ipe_end          
 00004400  fram_ipe_start        
 00004400  fram_rw_start         
 00004400  fram_rx_start         
+0001005c  init_UART             
 00010000  main                  
-000100a0  memcpy                
+000100a6  memcpy                
 
 
 GLOBAL SYMBOLS: SORTED BY Symbol Address 
@@ -1932,13 +1934,14 @@ address   name
 0000fffc  __TI_int54            
 0000fffe  _reset_vector         
 00010000  main                  
-000100a0  memcpy                
-000100b4  C$$EXIT               
-000100b4  abort                 
-000100ba  _system_pre_init      
+0001005c  init_UART             
+000100a6  memcpy                
+000100ba  C$$EXIT               
+000100ba  abort                 
+000100c0  _system_pre_init      
 ffffffff  __TI_pprof_out_hndl   
 ffffffff  __TI_prof_data_size   
 ffffffff  __TI_prof_data_start  
 ffffffff  __c_args__            
 
-[826 symbols]
+[827 symbols]
