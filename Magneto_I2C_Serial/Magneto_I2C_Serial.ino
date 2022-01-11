@@ -90,7 +90,7 @@ void displaying_led_infos()
 
   samples.add(mes);
   // Affichage de la moyenne
-  Serial.println(samples.getAverage());
+  Serial.println(mag1.m.z);
   //Serial.println(" mA");
 
   //Lancement de mesure
