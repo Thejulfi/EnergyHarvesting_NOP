@@ -30,7 +30,27 @@
 //  Description : I2C master send 5 configurations bytes to two LIS3MDL slave then
 //  read Z axis of these.
 //
-//  Julien Fichet
+//                   MSP430FR5969
+//                 -----------------
+//                |             P1.7|---------- I2C Clock (UCB0SCL)
+//                |                 |  |
+//                |             P1.6|---------- I2C Data (UCB0SDA)
+//                |                 |  |    |
+//                |                 |  |    |
+//                |                 |  |    |
+//                |                 |  |    |
+//                |                 |  |    |
+//         Gnd    |                 |  |    |
+//         /|\          LIS3MDL        |    |
+//          |      -----------------   |    |
+//          ------| P0           P4 |-------- SDA
+//       Vcc -----| Blue            |  |
+//       Gnd -----| Black        P5 |--- SCL
+//                |                 |
+//                |                 |
+//
+//
+//  Julien Fichet, Tristan Picot
 //  Polytech Nantes
 //  January 2022
 //******************************************************************************
@@ -138,7 +158,7 @@ int16_t Combine_h_l = 0;
 // FRAM storage function's prototype *******************************************
 //******************************************************************************
 
-void FRAMWrite(void);
+void FRAMWrite(int16_t data);
 
 
 
@@ -242,6 +262,16 @@ void CopyArray(uint8_t *source, uint8_t *dest, uint8_t count)
     }
 }
 */
+void config_mag()
+{
+    I2C_Master_WriteReg(SLAVE_ADDR_2, ST_REG_1_MASTER, DefaultConfiguration, DefaultConfiguration_LENGTH);
+}
+
+
+int16_t read_mag()
+{
+
+}
 
 //******************************************************************************
 // Device Initialization *******************************************************
@@ -299,11 +329,12 @@ void initI2C(uint8_t dev_addr)
 int main(void) {
 
     WDTCTL = WDTPW | WDTHOLD;   // Stop watchdog timer
-    /*
+
     initClockTo16MHz();
     initGPIO_I2C();
     initGPIO_FRAM();
     initI2C(SLAVE_ADDR_2);
+    initI2C(SLAVE_ADDR_1);
 
 
     I2C_Master_WriteReg(SLAVE_ADDR_2, ST_REG_1_MASTER, DefaultConfiguration, DefaultConfiguration_LENGTH);
@@ -314,11 +345,18 @@ int main(void) {
     I2C_Master_ReadReg(SLAVE_ADDR_2, REG_RD_2_SLAVE, Slave_RD_LENGTH);
     Slave_out_z_h = ReceiveBuffer[0];
 
+
+
     Combine_h_l = (int16_t)(Slave_out_z_h << 8 | Slave_out_z_l);
+
+    //Ecriture dans la FRAM
+    FRAMWrite(Combine_h_l);
+
 
     __bis_SR_register(LPM0_bits + GIE);
 
-    */
+
+    /*
     data = 0x0000;
 
      while(1)
@@ -342,7 +380,7 @@ int main(void) {
          data += 0x0001;
 
        }
-     }
+     }*/
     return 0;
 }
 
@@ -451,20 +489,20 @@ void __attribute__ ((interrupt(USCI_B0_VECTOR))) USCI_B0_ISR (void)
 //******************************************************************************
 #if defined(__TI_COMPILER_VERSION__)
 #pragma PERSISTENT(FRAM_write)
-unsigned long FRAM_write[WRITE_SIZE] = {0};
+int16_t FRAM_write[WRITE_SIZE] = {0};
 #elif defined(__IAR_SYSTEMS_ICC__)
 __persistent unsigned long FRAM_write[WRITE_SIZE] = {0};
 #elif defined(__GNUC__)
-unsigned long __attribute__((persistent)) FRAM_write[WRITE_SIZE] = {0};
+int16_t __attribute__((persistent)) FRAM_write[WRITE_SIZE] = {0};
 #else
 #error Compiler not supported!
 #endif
 
 // FRAM write functino
-void FRAMWrite(void)
+void FRAMWrite(int16_t data)
 {
-    //Ecriture à l'adresse i de la valeur data
+    //Write data in FRAM
     FRAM_write[i] = data;
-    //Incrémentation de i pour ecrire la donnée suivante à un autre emplacement
+    //i incrementation to write in the FRAM
     i = i+1;
 }
