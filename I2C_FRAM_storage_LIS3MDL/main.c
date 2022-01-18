@@ -95,7 +95,7 @@
  * CTRL_REG5 = 0x40 - FAST_READ enable, block data update for magnetic data set to default
  *
  * Slave_out_z_x are variables which will contain the values read in the registers OUT_X_L and OUT_X_LH
- * */
+*/
 
 uint8_t DefaultConfiguration [DefaultConfiguration_LENGTH] = {0,0,1,12,64}; // Default configuration to start receiving datat properly from LIS3MDL
 
@@ -151,7 +151,11 @@ uint8_t ReceiveIndex = 0;
 uint8_t TransmitBuffer[MAX_BUFFER_SIZE] = {0};
 uint8_t TXByteCtr = 0;
 uint8_t TransmitIndex = 0;
-int16_t Combine_h_l = 0;
+
+int16_t value_mag2 = 0;
+int16_t value_mag1 = 0;
+
+float mes;
 
 
 //******************************************************************************
@@ -262,14 +266,21 @@ void CopyArray(uint8_t *source, uint8_t *dest, uint8_t count)
     }
 }
 */
-void config_mag()
+void config_mag(uint32_t addr)
 {
-    I2C_Master_WriteReg(SLAVE_ADDR_2, ST_REG_1_MASTER, DefaultConfiguration, DefaultConfiguration_LENGTH);
+    I2C_Master_WriteReg(addr, ST_REG_1_MASTER, DefaultConfiguration, DefaultConfiguration_LENGTH);
 }
 
 
-int16_t read_mag()
+int16_t read_mag(uint32_t addr)
 {
+    I2C_Master_ReadReg(addr, REG_RD_1_SLAVE, Slave_RD_LENGTH);
+    Slave_out_z_l = ReceiveBuffer[0];
+
+    I2C_Master_ReadReg(addr, REG_RD_2_SLAVE, Slave_RD_LENGTH);
+    Slave_out_z_h = ReceiveBuffer[0];
+
+    return (int16_t)(Slave_out_z_h << 8 | Slave_out_z_l);
 
 }
 
@@ -320,6 +331,16 @@ void initI2C(uint8_t dev_addr)
     UCB0IE |= UCNACKIE;
 }
 
+/*void initTimer()
+{
+    TB0CTL |= TBCLR;
+    TB0CTL |= TBSSEL_ACLK;
+    TB0CTL |= MC__CONTINOUS;
+
+    TB0CTL |= TBIE;
+    TB0CTL &= ~TBIFG;
+}*/
+
 
 //******************************************************************************
 // Main ************************************************************************
@@ -330,57 +351,42 @@ int main(void) {
 
     WDTCTL = WDTPW | WDTHOLD;   // Stop watchdog timer
 
-    initClockTo16MHz();
+
+    initClockTo16MHz(); // Clock init
+
+    // GPIO for I2C and FRAM (LED to indicate write)
     initGPIO_I2C();
     initGPIO_FRAM();
+
+    // I2C intialization
     initI2C(SLAVE_ADDR_2);
     initI2C(SLAVE_ADDR_1);
 
+    // LIS3MDL magnetometers configuration
+    config_mag(SLAVE_ADDR_2);
+    config_mag(SLAVE_ADDR_1);
 
-    I2C_Master_WriteReg(SLAVE_ADDR_2, ST_REG_1_MASTER, DefaultConfiguration, DefaultConfiguration_LENGTH);
-
-    I2C_Master_ReadReg(SLAVE_ADDR_2, REG_RD_1_SLAVE, Slave_RD_LENGTH);
-    Slave_out_z_l = ReceiveBuffer[0];
-
-    I2C_Master_ReadReg(SLAVE_ADDR_2, REG_RD_2_SLAVE, Slave_RD_LENGTH);
-    Slave_out_z_h = ReceiveBuffer[0];
-
+    while(1){
+        value_mag2 = read_mag(SLAVE_ADDR_2);
+        value_mag1 = read_mag(SLAVE_ADDR_1);
 
 
-    Combine_h_l = (int16_t)(Slave_out_z_h << 8 | Slave_out_z_l);
 
-    //Ecriture dans la FRAM
-    FRAMWrite(Combine_h_l);
+        mes = fabs(((0+value_mag1)-value_mag2)*0.5*0.036539);
+
+        FRAMWrite(mes*1000);
+
+        count ++;
+
+        //P1OUT ^= 0x01;                        // Toggle LED to show 512K bytes
+        //__delay_cycles(16000);
+        //P1OUT ^= 0x01;                        // Toggle LED to show 512K bytes
 
 
-    __bis_SR_register(LPM0_bits + GIE);
+    }
 
 
-    /*
-    data = 0x0000;
-
-     while(1)
-     {
-
-       //Ecriture dans la FRAM
-       FRAMWrite();
-
-       //Incrémentation d'un compteur (utilisé surtout pour faire des tests)
-       count++;
-
-       //Gestion du dépassement
-       if(data >=0xFFFF){
-           data = 0x0000;}
-
-       //Si count = ... on allume la LED et on la remet à 0 avce une incrémentation de la valeur data
-       if (count == 1)
-       {
-         P1OUT ^= 0x01;                        // Toggle LED to show 512K bytes
-         count = 0;                            // ..have been written
-         data += 0x0001;
-
-       }
-     }*/
+    //__bis_SR_register(LPM0_bits + GIE);
     return 0;
 }
 
