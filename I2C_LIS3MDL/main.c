@@ -1,4 +1,4 @@
-//******************************************************************************
+//*******************************************************************************
 //   MSP430FR59xx Demo - eUSCI_B0, I2C Master multiple byte TX/RX
 //
 //   Description: I2C master communicates to I2C slave sending and receiving
