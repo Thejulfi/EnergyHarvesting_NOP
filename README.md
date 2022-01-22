@@ -2,7 +2,7 @@
 
 ## Introduction
 
-Le dépôt regroupe l'ensemble des codes développés dans le cadre du projet technique réalisé en 5e année de Polytech Nantes en ETN et spécialité SETR. Ces codes ont été réalisés sur une carte MSP430FR5060.
+Le dépôt regroupe l'ensemble des codes développés dans le cadre du projet technique réalisé en 5e année de Polytech Nantes en ETN et spécialité SETR. Ces codes ont été réalisés sur une carte MSP430FR5969.
 
 Dans la première partie de ce document, nous listons les logiciels utilisés pour charger et analyser les codes. Enfin, nous listons et décrivons chaque code.
 
@@ -17,6 +17,10 @@ Notons que le préfix "E_" désigne des codes utilisés depuis le framework Ener
 - [Energia](https://energia.nu/) : Logiciel open source permettant d'utiliser le framework Arduino avec les microprocesseurs de TI.
 
 ## Codes
+
+### ADC_Shunt_Remake
+
+Code permettant de lire la tension sur le pin 1.2 (ADC). Il est utilisé pour lire la tension image du courant de l'interface shunt.
 
 ### UART_Hello_world
 
