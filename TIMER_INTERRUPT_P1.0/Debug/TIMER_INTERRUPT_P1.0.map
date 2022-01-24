@@ -1,7 +1,7 @@
 ******************************************************************************
                   MSP430 Linker Unix v21.6.0                   
 ******************************************************************************
->> Linked Mon Jan 24 11:06:13 2022
+>> Linked Mon Jan 24 14:36:01 2022
 
 OUTPUT FILE NAME:   <TIMER_INTERRUPT_P1.0.out>
 ENTRY POINT SYMBOL: "_c_int00_noinit_noargs"  address: 00004400
@@ -224,7 +224,7 @@ SYSNMI     0    0000fffc    00000002
 
 .text      0    00010000    00000058     
                   00010000    00000024     main.obj (.text:main)
-                  00010024    00000020     main.obj (.text:timer_interrupt)
+                  00010024    00000020     main.obj (.text:init_timer_interrupt)
                   00010044    0000000a     main.obj (.text:toggle_led)
                   0001004e    00000006     rts430x_lc_rd_eabi.lib : exit.c.obj (.text:abort)
                   00010054    00000004                            : pre_init.c.obj (.text:_system_pre_init)
@@ -1104,8 +1104,8 @@ ffffffff  __c_args__
 00004400  fram_ipe_start        
 00004400  fram_rw_start         
 00004400  fram_rx_start         
+00010024  init_timer_interrupt  
 00010000  main                  
-00010024  timer_interrupt       
 00010044  toggle_led            
 
 
@@ -1932,7 +1932,7 @@ address   name
 0000fffc  __TI_int54            
 0000fffe  _reset_vector         
 00010000  main                  
-00010024  timer_interrupt       
+00010024  init_timer_interrupt  
 00010044  toggle_led            
 0001004e  C$$EXIT               
 0001004e  abort                 

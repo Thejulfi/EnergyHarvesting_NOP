@@ -7,9 +7,9 @@ void toggle_led(void){
 
 void init_timer_interrupt(void){
     TB0CTL |= TBCLR;                            // Clock divider logic clear, always read as zero.
-    TB0CTL |= TBSSEL__SMCLK;                    // Timer clock source select : SMCLK.
+    TB0CTL |= TBSSEL__ACLK;                    // Timer clock source select : SMCLK.
     TB0CTL |= MC__CONTINOUS;                    // Mode control to continous mode : Timer counts up to the value set by CNTL.
-    TB0CTL |= ID__8;                            // Clock divider by 8.
+    TB0CTL |= ID__1;                            // No clock divider.
 
 
     TB0CTL |= TBIE;                             // Enable interruption
