@@ -76,7 +76,7 @@
 #define REG_RD_2_SLAVE      45 // OUT_X_LH register address to read (0x29)
 
 
-#define ST_REG_1_MASTER      32 // CTRL_REG1 register to write first (0x20)
+#define ST_REG_1_MASTER      160 // CTRL_REG1 register to write first (0x20) with msb at "1" to enable address incrementation (for next CTRL_REGs)
 
 #define DefaultConfiguration_LENGTH   5 // Write into CTRL_REG1..CTRL_REG5
 #define Slave_RD_LENGTH   1 // reading one byte in OUT_X_L & OUT_X_H
