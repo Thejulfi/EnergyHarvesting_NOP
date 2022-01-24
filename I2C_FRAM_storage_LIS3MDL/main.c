@@ -255,17 +255,6 @@ I2C_Mode I2C_Master_WriteReg(uint8_t dev_addr, uint8_t reg_addr, uint8_t *reg_da
     return MasterMode;
 }
 
-// function that operates a copy array. If multiple data are coming form I2C
-/*
-void CopyArray(uint8_t *source, uint8_t *dest, uint8_t count)
-{
-    uint8_t copyIndex = 0;
-    for (copyIndex = 0; copyIndex < count; copyIndex++)
-    {
-        dest[copyIndex] = source[copyIndex];
-    }
-}
-*/
 void config_mag(uint32_t addr)
 {
     I2C_Master_WriteReg(addr, ST_REG_1_MASTER, DefaultConfiguration, DefaultConfiguration_LENGTH);
