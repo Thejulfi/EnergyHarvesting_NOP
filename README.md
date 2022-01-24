@@ -42,4 +42,4 @@ Programme permettant de stocker dans la FRAM la valeur data. Data est un entier 
 
 ### TIMER_INTERRUPT_P1.0
 
-Code exemple permettant d'implémenter une interruption cadencée au rythme d'un timer interne divisé. Le code réalise un blink de la LED0 (pin 1.0) au rythme de 1Hz.
+Code exemple permettant d'implémenter une interruption cadencée au rythme d'un timer interne divisé. Le code réalise un blink de la LED0 (pin 1.0) au rythme de 0.5Hz.
