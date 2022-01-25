@@ -103,7 +103,6 @@ uint8_t Slave_out_z_l;
 uint8_t Slave_out_z_h;
 
 
-
 //******************************************************************************
 // FRAM variables***************************************************************
 //******************************************************************************
@@ -294,7 +293,7 @@ void initGPIO_I2C()
     // previously configured port settings
 }
 
-/*void initButton(){
+void initButton(){
 
     P1DIR &= ~BIT1;
     P1REN |= BIT1;
@@ -304,7 +303,7 @@ void initGPIO_I2C()
 
     P1IFG &= ~BIT1;
     P1IE |= BIT1;
-}*/
+}
 
 void initClockTo16MHz()
 {
@@ -329,6 +328,9 @@ void initI2C(uint8_t dev_addr)
     UCB0I2CSA = dev_addr;                   // Slave Address
     UCB0CTLW0 &= ~UCSWRST;                    // Clear SW reset, resume operation
     UCB0IE |= UCNACKIE;
+
+    TB0CTL |= TBIE;
+    TB0CTL &= ~TBIFG;
 }
 
 
@@ -339,9 +341,6 @@ void init_timer_interrupt(void){
     TB0CTL |= ID__8;
     TB0CTL |= CNTL_1;
 
-
-    TB0CTL |= TBIE;
-    TB0CTL &= ~TBIFG;
 }
 
 //******************************************************************************
@@ -402,7 +401,7 @@ int main(void) {
     init_timer_interrupt();
 
 
-//    initButton();
+    initButton();
 
     // Endless loop waiting for interruption
     while(1){
@@ -566,4 +565,17 @@ void __attribute__ ((interrupt(TIMER0_B1_VECTOR))) TIMER0_B1_ISR (void)
       break;
     default: break;
   }
+}
+
+
+#pragma vector = PORT1_VECTOR
+__interrupt void ISR_PORT1_S1(void)
+{
+  P1IFG &= ~BIT1;
+
+  TB0CTL ^= TBIE; //disable / enable interruption
+  TB0CTL &= ~TBIFG;
+
+  P1OUT = 0xFE; // turn off LED at P1OUT
+
 }
