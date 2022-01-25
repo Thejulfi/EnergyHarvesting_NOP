@@ -213,12 +213,12 @@ I2C_Mode I2C_Master_ReadReg(uint8_t dev_addr, uint8_t reg_addr, uint8_t count)
 
     /* Initialize slave address and interrupts */
     UCB0I2CSA = dev_addr;
-    UCB0IFG &= ~(UCTXIFG + UCRXIFG);       // Clear any pending interrupts
+    UCB0IFG &= ~(UCTXIFG + UCRXIFG);         // Clear any pending interrupts
     UCB0IE &= ~UCRXIE;                       // Disable RX interrupt
     UCB0IE |= UCTXIE;                        // Enable TX interrupt
 
     UCB0CTLW0 |= UCTR + UCTXSTT;             // I2C TX, start condition
-    __bis_SR_register(LPM0_bits + GIE);              // Enter LPM0 w/ interrupts
+    __bis_SR_register(LPM0_bits + GIE);      // Enter LPM0 w/ interrupts
 
 
 
@@ -321,17 +321,7 @@ void initI2C(uint8_t dev_addr)
 }
 
 
-void init_timer_interrupt(void){
-    TB0CTL |= TBCLR;
-    TB0CTL |= TBSSEL__ACLK;
-    TB0CTL |= MC__CONTINOUS;
-    TB0CTL |= ID__8;
-    TB0CTL |= CNTL_1;
-
-
-    TB0CTL |= TBIE;
-    TB0CTL &= ~TBIFG;
-}
+n
 
 //******************************************************************************
 // Various other functions *****************************************************

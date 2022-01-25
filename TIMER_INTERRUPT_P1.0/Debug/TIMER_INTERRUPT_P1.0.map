@@ -1,7 +1,7 @@
 ******************************************************************************
                   MSP430 Linker Unix v21.6.0                   
 ******************************************************************************
->> Linked Mon Jan 24 14:36:01 2022
+>> Linked Tue Jan 25 10:11:18 2022
 
 OUTPUT FILE NAME:   <TIMER_INTERRUPT_P1.0.out>
 ENTRY POINT SYMBOL: "_c_int00_noinit_noargs"  address: 00004400
@@ -79,7 +79,7 @@ MEMORY CONFIGURATION
   INT53                 0000fffa   00000002  00000002  00000000  RWIX
   INT54                 0000fffc   00000002  00000002  00000000  RWIX
   RESET                 0000fffe   00000002  00000002  00000000  RWIX
-  FRAM2                 00010000   00003ff8  00000058  00003fa0  RWIX
+  FRAM2                 00010000   00003ff8  00000084  00003f74  RWIX
 
 
 SECTION ALLOCATION MAP
@@ -222,21 +222,22 @@ SYSNMI     0    0000fffc    00000002
 .reset     0    0000fffe    00000002     
                   0000fffe    00000002     rts430x_lc_rd_eabi.lib : boot.c.obj (.reset)
 
-.text      0    00010000    00000058     
-                  00010000    00000024     main.obj (.text:main)
-                  00010024    00000020     main.obj (.text:init_timer_interrupt)
-                  00010044    0000000a     main.obj (.text:toggle_led)
-                  0001004e    00000006     rts430x_lc_rd_eabi.lib : exit.c.obj (.text:abort)
-                  00010054    00000004                            : pre_init.c.obj (.text:_system_pre_init)
+.text      0    00010000    00000084     
+                  00010000    00000028     main.obj (.text:main)
+                  00010028    00000026     main.obj (.text:init_timer_interrupt)
+                  0001004e    00000022     main.obj (.text:initClockTo16MHz)
+                  00010070    0000000a     main.obj (.text:toggle_led)
+                  0001007a    00000006     rts430x_lc_rd_eabi.lib : exit.c.obj (.text:abort)
+                  00010080    00000004                            : pre_init.c.obj (.text:_system_pre_init)
 
 MODULE SUMMARY
 
        Module             code   ro data   rw data
        ------             ----   -------   -------
     ./
-       main.obj           96     2         0      
+       main.obj           140    2         0      
     +--+------------------+------+---------+---------+
-       Total:             96     2         0      
+       Total:             140    2         0      
                                                   
     /Applications/ti/ccs1110/ccs/tools/compiler/ti-cgt-msp430_21.6.0.LTS/lib/rts430x_lc_rd_eabi.lib
        boot.c.obj         20     2         0      
@@ -272,7 +273,7 @@ MODULE SUMMARY
                                                   
        Stack:             0      0         160    
     +--+------------------+------+---------+---------+
-       Grand Total:       134    52        160    
+       Grand Total:       178    52        160    
 
 
 GLOBAL SYMBOLS: SORTED ALPHABETICALLY BY Name 
@@ -536,7 +537,7 @@ address   name
 000009ce  AESAXIN_L             
 000004be  BCD2BIN               
 000004bc  BIN2BCD               
-0001004e  C$$EXIT               
+0001007a  C$$EXIT               
 0000043e  CAPTIO0CTL            
 0000043f  CAPTIO0CTL_H          
 0000043e  CAPTIO0CTL_L          
@@ -1098,15 +1099,16 @@ ffffffff  __c_args__
 00004400  _c_int00_noinit_noargs
 0000fffe  _reset_vector         
 00002360  _stack                
-00010054  _system_pre_init      
-0001004e  abort                 
+00010080  _system_pre_init      
+0001007a  abort                 
 00004400  fram_ipe_end          
 00004400  fram_ipe_start        
 00004400  fram_rw_start         
 00004400  fram_rx_start         
-00010024  init_timer_interrupt  
+0001004e  initClockTo16MHz      
+00010028  init_timer_interrupt  
 00010000  main                  
-00010044  toggle_led            
+00010070  toggle_led            
 
 
 GLOBAL SYMBOLS: SORTED BY Symbol Address 
@@ -1932,14 +1934,15 @@ address   name
 0000fffc  __TI_int54            
 0000fffe  _reset_vector         
 00010000  main                  
-00010024  init_timer_interrupt  
-00010044  toggle_led            
-0001004e  C$$EXIT               
-0001004e  abort                 
-00010054  _system_pre_init      
+00010028  init_timer_interrupt  
+0001004e  initClockTo16MHz      
+00010070  toggle_led            
+0001007a  C$$EXIT               
+0001007a  abort                 
+00010080  _system_pre_init      
 ffffffff  __TI_pprof_out_hndl   
 ffffffff  __TI_prof_data_size   
 ffffffff  __TI_prof_data_start  
 ffffffff  __c_args__            
 
-[828 symbols]
+[829 symbols]
