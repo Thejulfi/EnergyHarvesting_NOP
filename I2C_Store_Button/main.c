@@ -303,6 +303,15 @@ void initButton(){
 
     P1IFG &= ~BIT1;
     P1IE |= BIT1;
+
+    P4DIR &= ~BIT5;
+    P4REN |= BIT5;
+    P4OUT |= BIT5;
+    P4IES |= BIT5;
+
+
+    P4IFG &= ~BIT5;
+    P4IE |= BIT5;
 }
 
 void initClockTo16MHz()
@@ -351,6 +360,7 @@ void init_timer_interrupt(void){
 // toggleing LED1.0 on/off
 void toggle_led(void){
     P1OUT ^= BIT0; // toggle led
+
     TB0CTL &= ~TBIFG; //disable interrupt
 }
 
@@ -573,9 +583,24 @@ __interrupt void ISR_PORT1_S1(void)
 {
   P1IFG &= ~BIT1;
 
-  TB0CTL ^= TBIE; //disable / enable interruption
+  TB0CTL ^= TBIE; //disable - enable interruption
   TB0CTL &= ~TBIFG;
 
   P1OUT = 0xFE; // turn off LED at P1OUT
+
+}
+
+#pragma vector = PORT4_VECTOR
+__interrupt void ISR_PORT4_S5(void)
+{
+  P4IFG &= ~BIT5;
+
+  int j;
+
+  for(j = 0;j<=i;j++){
+      FRAM_write[j] = (int16_t)0;
+
+  }
+  i = 0;
 
 }
