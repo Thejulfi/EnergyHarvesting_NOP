@@ -2,7 +2,7 @@
 <link_info>
    <banner>MSP430 Linker Unix v21.6.0.LTS</banner>
    <copyright>Copyright (c) 2003-2018 Texas Instruments Incorporated</copyright>
-   <link_time>0x61efbeb6</link_time>
+   <link_time>0x61efc851</link_time>
    <link_errors>0x0</link_errors>
    <output_file>TIMER_INTERRUPT_P1.0.out</output_file>
    <entry_point>
@@ -619,7 +619,7 @@
          <size>0x100</size>
          <input_file_ref idref="fl-44"/>
       </object_component>
-      <object_component id="oc-3e1">
+      <object_component id="oc-3e0">
          <name>.debug_info</name>
          <load_address>0x8a9</load_address>
          <run_address>0x8a9</run_address>
@@ -911,7 +911,7 @@
          <size>0x20</size>
          <input_file_ref idref="fl-26"/>
       </object_component>
-      <object_component id="oc-3e0">
+      <object_component id="oc-3e1">
          <name>.debug_aranges</name>
          <load_address>0xc0</load_address>
          <run_address>0xc0</run_address>
@@ -1742,7 +1742,7 @@
             <object_component_ref idref="oc-3b6"/>
             <object_component_ref idref="oc-3c9"/>
             <object_component_ref idref="oc-3ad"/>
-            <object_component_ref idref="oc-3e1"/>
+            <object_component_ref idref="oc-3e0"/>
             <object_component_ref idref="oc-431"/>
             <object_component_ref idref="oc-46d"/>
             <object_component_ref idref="oc-58d"/>
@@ -1824,7 +1824,7 @@
             <object_component_ref idref="oc-438"/>
             <object_component_ref idref="oc-3cf"/>
             <object_component_ref idref="oc-3ca"/>
-            <object_component_ref idref="oc-3e0"/>
+            <object_component_ref idref="oc-3e1"/>
             <object_component_ref idref="oc-432"/>
             <object_component_ref idref="oc-46e"/>
          </contents>

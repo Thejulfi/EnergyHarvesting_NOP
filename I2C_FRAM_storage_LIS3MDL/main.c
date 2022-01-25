@@ -213,12 +213,12 @@ I2C_Mode I2C_Master_ReadReg(uint8_t dev_addr, uint8_t reg_addr, uint8_t count)
 
     /* Initialize slave address and interrupts */
     UCB0I2CSA = dev_addr;
-    UCB0IFG &= ~(UCTXIFG + UCRXIFG);         // Clear any pending interrupts
+    UCB0IFG &= ~(UCTXIFG + UCRXIFG);       // Clear any pending interrupts
     UCB0IE &= ~UCRXIE;                       // Disable RX interrupt
     UCB0IE |= UCTXIE;                        // Enable TX interrupt
 
     UCB0CTLW0 |= UCTR + UCTXSTT;             // I2C TX, start condition
-    __bis_SR_register(LPM0_bits + GIE);      // Enter LPM0 w/ interrupts
+    __bis_SR_register(LPM0_bits + GIE);              // Enter LPM0 w/ interrupts
 
 
 
@@ -255,17 +255,6 @@ I2C_Mode I2C_Master_WriteReg(uint8_t dev_addr, uint8_t reg_addr, uint8_t *reg_da
     return MasterMode;
 }
 
-// function that operates a copy array. If multiple data are coming form I2C
-/*
-void CopyArray(uint8_t *source, uint8_t *dest, uint8_t count)
-{
-    uint8_t copyIndex = 0;
-    for (copyIndex = 0; copyIndex < count; copyIndex++)
-    {
-        dest[copyIndex] = source[copyIndex];
-    }
-}
-*/
 void config_mag(uint32_t addr)
 {
     I2C_Master_WriteReg(addr, ST_REG_1_MASTER, DefaultConfiguration, DefaultConfiguration_LENGTH);
@@ -303,7 +292,6 @@ void initGPIO_I2C()
     P1SEL1 |= BIT6 | BIT7;                    // I2C pins
     // Disable the GPIO power-on default high-impedance mode to activate
     // previously configured port settings
-    PM5CTL0 &= ~LOCKLPM5;
 }
 
 void initClockTo16MHz()
@@ -331,6 +319,18 @@ void initI2C(uint8_t dev_addr)
     UCB0IE |= UCNACKIE;
 }
 
+
+void init_timer_interrupt(void){
+    TB0CTL |= TBCLR;
+    TB0CTL |= TBSSEL__ACLK;
+    TB0CTL |= MC__CONTINOUS;
+    TB0CTL |= ID__8;
+    TB0CTL |= CNTL_1;
+
+
+    TB0CTL |= TBIE;
+    TB0CTL &= ~TBIFG;
+}
 
 //******************************************************************************
 // Various other functions *****************************************************
@@ -369,6 +369,7 @@ void measurement(void){
 int main(void) {
 
     WDTCTL = WDTPW | WDTHOLD;   // Stop watchdog timer
+    PM5CTL0 &= ~LOCKLPM5;
 
     // Init intern SMLCK clock to 16MHz
     initClockTo16MHz();
@@ -551,4 +552,3 @@ void __attribute__ ((interrupt(TIMER0_B1_VECTOR))) TIMER0_B1_ISR (void)
     default: break;
   }
 }
-
