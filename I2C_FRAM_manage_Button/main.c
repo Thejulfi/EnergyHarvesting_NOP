@@ -33,22 +33,22 @@
 //                   MSP430FR5969
 //                 -----------------
 //                |             P1.7|---------- I2C Clock (UCB0SCL)
-//                |                 |  |
-//                |             P1.6|---------- I2C Data (UCB0SDA)
+//   start/stop --| P1.1 (B)        |  |
+//   erase FRAM --| P4.5 (B)    P1.6|---------- I2C Data (UCB0SDA)
 //                |                 |  |    |
 //                |                 |  |    |
 //                |                 |  |    |
-//                |                 |  |    |
-//                |                 |  |    |
-//         Gnd    |                 |  |    |
-//         /|\          LIS3MDL        |    |
-//          |      -----------------   |    |
-//          ------| P0           P4 |-------- SDA
-//       Vcc -----| Blue            |  |
-//       Gnd -----| Black        P5 |--- SCL
-//                |                 |
-//                |                 |
-//
+//                |      3.3v (ext) |--|----|--------
+//                |                 |  |    |       |
+//         Gnd    |                 |  |    |       |
+//         /|\          LIS3MDL        |    |       |
+//          |      -----------------   |    |       |
+//          ------| P0           P4 |-------- SDA   |
+//       Vcc -----| Blue            |  |            |
+//       Gnd -----| Black        P5 |--- SCL        |
+//                |                 |               |
+//                |                 |               |
+//                |            Vcap |----------------
 //
 //  Julien Fichet, Tristan Picot
 //  Polytech Nantes
@@ -72,8 +72,8 @@
  * TYPE_X_LENGTH: packets' length (in byte) to read or to write
  * */
 
-#define REG_RD_1_SLAVE      44 // OUT_X_L register address to read (0x28)
-#define REG_RD_2_SLAVE      45 // OUT_X_LH register address to read (0x29)
+#define REG_RD_1_SLAVE      44 // OUT_Z_L register address to read (0x2C)
+#define REG_RD_2_SLAVE      45 // OUT_Z_H register address to read (0x2D)
 
 
 #define ST_REG_1_MASTER      160 // CTRL_REG1 register to write first (0x20) with msb at "1" to enable address incrementation (for next CTRL_REGs)
@@ -161,7 +161,7 @@ float mes;
 // FRAM storage function's prototype *******************************************
 //******************************************************************************
 
-void FRAMWrite(int16_t data);
+void FRAMWrite(float data);
 
 
 
@@ -200,15 +200,19 @@ I2C_Mode I2C_Master_ReadReg(uint8_t dev_addr, uint8_t reg_addr, uint8_t count);
 //******************************************************************************
 
 
+// starting reading on "reg_addr" from I2C slave "dev_addr".
 I2C_Mode I2C_Master_ReadReg(uint8_t dev_addr, uint8_t reg_addr, uint8_t count)
 {
     /* Initialize state machine */
-    MasterMode = TX_REG_ADDRESS_MODE;
-    TransmitRegAddr = reg_addr;
-    RXByteCtr = count;
-    TXByteCtr = 0;
-    ReceiveIndex = 0;
-    TransmitIndex = 0;
+    MasterMode = TX_REG_ADDRESS_MODE; // State machine mode - transmitting "reg_addr" before reading
+
+
+    /* Useful variables definition */
+    TransmitRegAddr = reg_addr; //resgiter to read addr
+    RXByteCtr = count; // number of bytes to read
+    TXByteCtr = 0; // Number of bytes to transmit (0 here mean there is no bytes to transmit except "reg_addr").
+    ReceiveIndex = 0; // Init receive index
+    TransmitIndex = 0; // Init transmit index
 
     /* Initialize slave address and interrupts */
     UCB0I2CSA = dev_addr;
@@ -216,10 +220,9 @@ I2C_Mode I2C_Master_ReadReg(uint8_t dev_addr, uint8_t reg_addr, uint8_t count)
     UCB0IE &= ~UCRXIE;                       // Disable RX interrupt
     UCB0IE |= UCTXIE;                        // Enable TX interrupt
 
+    /* Start condition and sleep mode */
     UCB0CTLW0 |= UCTR + UCTXSTT;             // I2C TX, start condition
     __bis_SR_register(LPM0_bits + GIE);              // Enter LPM0 w/ interrupts
-
-
 
     return MasterMode;
 
@@ -232,9 +235,7 @@ I2C_Mode I2C_Master_WriteReg(uint8_t dev_addr, uint8_t reg_addr, uint8_t *reg_da
     MasterMode = TX_REG_ADDRESS_MODE;
     TransmitRegAddr = reg_addr;
 
-    //Copy register data to TransmitBuffer
-    //CopyArray(reg_data, TransmitBuffer, count);
-
+    /* Useful variables definition */
     TXByteCtr = count;
     RXByteCtr = 0;
     ReceiveIndex = 0;
@@ -246,6 +247,7 @@ I2C_Mode I2C_Master_WriteReg(uint8_t dev_addr, uint8_t reg_addr, uint8_t *reg_da
     UCB0IE &= ~UCRXIE;                       // Disable RX interrupt
     UCB0IE |= UCTXIE;                        // Enable TX interrupt
 
+    /* Start condition and sleep mode */
     UCB0CTLW0 |= UCTR;             // I2C TX, start condition
     UCB0CTLW0 |= UCTXSTT;
 
@@ -295,6 +297,8 @@ void initGPIO_I2C()
 
 void initButton(){
 
+
+    // Button P1.1 init
     P1DIR &= ~BIT1;
     P1REN |= BIT1;
     P1OUT |= BIT1;
@@ -304,6 +308,7 @@ void initButton(){
     P1IFG &= ~BIT1;
     P1IE |= BIT1;
 
+    // Button P4.5 init
     P4DIR &= ~BIT5;
     P4REN |= BIT5;
     P4OUT |= BIT5;
@@ -357,7 +362,7 @@ void init_timer_interrupt(void){
 //******************************************************************************
 
 
-// toggleing LED1.0 on/off
+// toggling LED1.0 on/off
 void toggle_led(void){
     P1OUT ^= BIT0; // toggle led
 
@@ -367,13 +372,14 @@ void toggle_led(void){
 
 // LIS3MFDL reading, calculation to obtain mA and FRAM storage.
 void measurement(void){
+    // reading out Z register from slave 1 and slave 2
     value_mag2 = read_mag(SLAVE_ADDR_2);
     value_mag1 = read_mag(SLAVE_ADDR_1);
 
-
-
+    //
     mes = fabs(((0+value_mag1)-value_mag2)*0.5*0.036539);
 
+    // Writing in the FRAM float mes times 1000
     FRAMWrite(mes*1000);
 
     count ++;
@@ -411,6 +417,7 @@ int main(void) {
     init_timer_interrupt();
 
 
+    // Button for interruptions initialization
     initButton();
 
     // Endless loop waiting for interruption
@@ -418,7 +425,6 @@ int main(void) {
         __bis_SR_register(LPM0_bits | GIE);         // Enter LPM0, enable interrupts
         __no_operation();                           // For debugger
     }
-
 
     return 0;
 }
@@ -538,7 +544,7 @@ int16_t __attribute__((persistent)) FRAM_write[WRITE_SIZE] = {0};
 #endif
 
 // FRAM write functino
-void FRAMWrite(int16_t data)
+void FRAMWrite(float data)
 {
     //Write data in FRAM
     FRAM_write[i] = data;
@@ -571,36 +577,43 @@ void __attribute__ ((interrupt(TIMER0_B1_VECTOR))) TIMER0_B1_ISR (void)
     case TB0IV_TBCCR5: break;               // CCR5 not used
     case TB0IV_TBCCR6: break;               // CCR6 not used
     case TB0IV_TBIFG:                       // overflow
-        measurement();
+        measurement(); // Carry out the measurement
       break;
     default: break;
   }
 }
 
 
+//******************************************************************************
+// Enable/disable measurements *************************************************
+//******************************************************************************
 #pragma vector = PORT1_VECTOR
 __interrupt void ISR_PORT1_S1(void)
 {
-  P1IFG &= ~BIT1;
+  P1IFG &= ~BIT1; // disable interruption flag on button 1.1
 
   TB0CTL ^= TBIE; //disable - enable interruption
-  TB0CTL &= ~TBIFG;
+  TB0CTL &= ~TBIFG; // set interrupt flag
 
   P1OUT = 0xFE; // turn off LED at P1OUT
 
 }
 
+//******************************************************************************
+// Erase FRAM memory ***********************************************************
+//******************************************************************************
 #pragma vector = PORT4_VECTOR
 __interrupt void ISR_PORT4_S5(void)
 {
-  P4IFG &= ~BIT5;
+  P4IFG &= ~BIT5; // disable interruption flag on button 4.5
 
   int j;
-
+  // FRAM values replacement by "0"
   for(j = 0;j<=i;j++){
-      FRAM_write[j] = (int16_t)0;
+      FRAM_write[j] = (float)0;
 
   }
+  // reset i value
   i = 0;
 
 }

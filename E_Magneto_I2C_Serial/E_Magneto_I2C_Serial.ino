@@ -64,7 +64,7 @@ void setup()
 
 void displaying_led_infos()
 {
-  int offset = 0;
+  int offset =0;
   //Lecture des registres de sortie en I2C
   mag1.read();
   mag2.read();
@@ -93,6 +93,7 @@ void displaying_led_infos()
   Serial.print(mes);
   Serial.println(" mA");
 
+  delay(100);
   //Lancement de mesure
   mag1.writeReg(mag1.CTRL_REG3, 0x01);
   mag2.writeReg(mag1.CTRL_REG3, 0x01);
