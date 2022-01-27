@@ -8,8 +8,12 @@ Dans la première partie de ce document, nous listons les logiciels utilisés po
 
 Notons que le préfix "E_" désigne des codes utilisés depuis le framework EnergiaIDE. Les dossiers n'ayant pas de préfix doivent être utilisés avec l'environnement de développement Code Composer Studio.
 
-## Logiciels utilisés
+## Table des matières
 
+[Codes - ADC_Shunt_Remake](#adc_shunt_remake)  
+
+
+## Logiciels utilisés
 
 
 - [Uniflash](https://www.ti.com/tool/UNIFLASH) : Uniflash est un outil graphique autonome utilisé pour programmer la mémoire flash sur puce produites par TI.
