@@ -11,6 +11,7 @@ void initADC (); //Initialize the ADC
 void read_adc ();   //Read the value on the ADC and convert into current
 
 
+
 //Command for write into the FRAM with a array of size WRITE_SIZE (1000)
 #if defined(__TI_COMPILER_VERSION__)
 #pragma PERSISTENT(FRAM_write)
@@ -58,7 +59,7 @@ int main(void)
 	while (1)
 	{
 
-	__delay_cycles(50000);
+	__delay_cycles(2500000);
 	ADC12CTL0 |= ADC12ENC | ADC12SC; // Start sampling/conversion
 
 	__bis_SR_register(LPM0_bits | GIE); // LPM0, ADC12_ISR will force exit
@@ -69,20 +70,20 @@ int main(void)
 void read_adc (){
     ADC_value = ADC12MEM0; // Save MEM0
 
-       Voltage = (((ADC_value - 1500)*3.6)/2200)*100; //Voltage * 100 (result in mV)
-       Current = (Voltage/25)*1000; //Current * 1000 (in µA)
+       //Voltage = (((ADC_value - 1500)*3.6)/2200)*100; //Voltage * 100 (result in mV)
+       Voltage = ((ADC_value)*1000)/1340; //Voltage * 1000 (result in mV)
+       Current = (Voltage/25)*1000; //Current *0 100 (in µA)
 
-
-       if(k<=1000){
+        if(k<=1000){
        //Write the value of the current to the adress k
        FRAM_write[k] = Current;
        //k is incremented to go to the next adress of the FRAM
        k = k+1;
 
        //Write the value of the voltage to the adress k
-       FRAM_write[k] = Voltage;
+       //FRAM_write[k] = Voltage;
        //k is incremented to go to the next adress of the FRAM
-       k = k+1;
+       //k = k+1;
        }
 }
 
@@ -99,7 +100,7 @@ void initADC ()
     ADC12CTL0 = ADC12SHT0_2 | ADC12ON;                               //  16 cycles
     ADC12CTL1 = ADC12SSEL_3 | ADC12SHP;                              //  ADC12CLK -> SMCLK
     ADC12CTL2 = ADC12RES__12BIT;                                     //  12 bit resolution
-    ADC12MCTL0 = ADC12INCH_2 | ADC12DIF;                             // Channel2 ADC input select; Vref=AVCC
-    ADC12IER0 = ADC12IE0;                                            // Enable ADC conv complete interrupt
+    ADC12MCTL0 |= ADC12INCH_2 | REFVSEL_0;                             // Channel2 ADC input select; Vref=1.2V
+    ADC12IER0 = ADC12IE0;                                            // Enable ADC conv complete interrupt on MEM0
 
 }
