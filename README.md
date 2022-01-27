@@ -32,6 +32,15 @@ Code utilisant la librarie Wire.h et LIS3MDL.h afin de réaliser une connexion I
 
 ### I2C_FRAM_storage_LIS3MDL
 
+Utilisation d'un timer RTC générant une interruption réveillant notre système toutes les secondes. À cette fréquence, notre système vient réaliser une mesure du champ magnétique en Z via une interaction I2C et stock ensuite dans la FRAM le résultat de la mesure de courant incluant ce calcul.
+
+### I2C_FRAM_manage_Button
+
+Il s'agit d'une version améliorée de "I2C_FRAM_storage_LIS3MDL". Cette version utilise les deux boutons P1.1 et P4.5 afin de commander l'écrasement ou non de la FRAM et le démarrage ou l'arrêt des mesures.
+
+- Le bouton P1.1 permet de lancer le protocole de mesure (1 mesure par seconde),
+- Le bouton P4.5 permet d'effacer les données de la mémoire FRAM.
+
 ### I2C_LIS3MDL
 
 Driver I2C réalisé bas-niveau (configuration des registres). Ce code permet de transférer une configuration aux magnétomètres et de lire, par la suite, les registres chargés de stocker les mesures réalisés par les magnétomètres.
