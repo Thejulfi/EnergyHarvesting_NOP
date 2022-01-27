@@ -384,7 +384,7 @@ void measurement(void){
 
     count ++;
 
-    toggle_led(); // Toggle LED1.0 to show that a data has been written in the FRAM
+    //toggle_led(); // Toggle LED1.0 to show that a data has been written in the FRAM
 }
 
 
