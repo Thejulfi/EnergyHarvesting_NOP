@@ -10,18 +10,29 @@ Notons que le préfix "E_" désigne des codes utilisés depuis le framework Ener
 
 ## Table des matières
 
-[1] - [Codes - ADC_Shunt_Remake](#adc_shunt_remake)  
-[2] - [Codes - UART_Hello_world](#uart_hello_world)  
-[3] - [Codes - E_Magneto_I2C_Serial](#e_magneto_i2c_serial)  
-[4] - [Codes - I2C_FRAM_storage_LIS3MDL](#i2c_fram_storage_lis3mdl)  
-[5] - [Codes - I2C_FRAM_manage_Button](#i2c_fram_manage_button)  
-[6] - [Codes - I2C_LIS3MDL](#i2c_lis3mdl)  
-[7] - [Codes - FRAM_storage](#fram_storage)  
-[8] - [Codes - TIMER_INTERRUPT](#timer_interrupt)  
-[9] - [Codes - Button_interruption](#button_interruption)
-[10] - [Codes - Cout_mesure_ADC](#cout_mesure_adc)
-[11] - [Codes - UART_Hellow_world_MSP430](#uart_hellow_world_msp430)
-[12] - [Codes - E_EWMA_simple_implementation](#e_ewma_simple_implementation)
+[1] : [Codes - ADC_Shunt_Remake](#adc_shunt_remake)  
+
+[2] : [Codes - UART_Hello_world](#uart_hello_world)  
+
+[3] : [Codes - E_Magneto_I2C_Serial](#e_magneto_i2c_serial)  
+
+[4] : [Codes - I2C_FRAM_storage_LIS3MDL](#i2c_fram_storage_lis3mdl)  
+
+[5] : [Codes - I2C_FRAM_manage_Button](#i2c_fram_manage_button)  
+
+[6] : [Codes - I2C_LIS3MDL](#i2c_lis3mdl)  
+
+[7] : [Codes - FRAM_storage](#fram_storage)  
+
+[8] : [Codes - TIMER_INTERRUPT](#timer_interrupt)  
+
+[9] : [Codes - Button_interruption](#button_interruption) 
+
+[10] : [Codes - Cout_mesure_ADC](#cout_mesure_adc) 
+
+[11] : [Codes - UART_Hello_world_MSP430](#uart_hello_world_msp430) 
+
+[12] : [Codes - E_EWMA_simple_implementation](#e_ewma_simple_implementation) 
 
 ## Logiciels utilisés
 
@@ -74,6 +85,6 @@ Exemple d'une interruption déclenché par un bouton-poussoir relié à la broch
 ### Cout_mesure_ADC
 
 
-### UART_Hellow_world_MSP430
+### UART_Hello_world_MSP430
 
 ### E_EWMA_simple_implementation
