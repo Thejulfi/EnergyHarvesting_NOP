@@ -10,7 +10,12 @@ Notons que le préfix "E_" désigne des codes utilisés depuis le framework Ener
 
 ## Table des matières
 
-[Codes - ADC_Shunt_Remake](#adc_shunt_remake)  
+[1] - [Codes - ADC_Shunt_Remake](#adc_shunt_remake)  
+[2] - [Codes - UART_Hello_world](#uart_hello_world)  
+[3] - [Codes - E_Magneto_I2C_Serial](#e_magneto_i2c_serial)  
+[4] - [Codes - I2C_FRAM_storage_LIS3MDL](#i2c_fram_storage_lis3mdl)  
+[5] - [Codes - I2C_FRAM_manage_Button](#i2c_fram_manage_button)  
+[6] - [Codes - I2C_LIS3MDL](#i2c_lis3mdl)  
 
 
 ## Logiciels utilisés
