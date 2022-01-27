@@ -80,7 +80,7 @@ Code exemple permettant d'implémenter une interruption cadencée au rythme d'un
 
 ### Button_interruption 
 
-Exemple d'une interruption déclenché par un bouton-poussoir relié à la broche P1.1.
+Exemple d'une interruption déclenché par un bouton-poussoir relié à la broche P1.1. Actionner le bouton-poussoir fait basculer la LED de la broche P1.0 à l'état inverse de son état actuel (elle s'allume si elle est éteinte et s'éteint dans le cas contraire).
 
 ### Cout_mesure_ADC
 
