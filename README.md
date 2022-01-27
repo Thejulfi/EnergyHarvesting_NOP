@@ -84,6 +84,7 @@ Exemple d'une interruption déclenché par un bouton-poussoir relié à la broch
 
 ### Cout_mesure_ADC
 
+Code qui réalise 100 mesures toutes les secondes (avec un RTC) sur l'ADC. Le programme peut être modifié dans la partie liée à l'interruption de l'ADC pour observer la consommation avec la sauvegarde des valeurs dans la FRAM.
 
 ### UART_Hello_world_MSP430
 
