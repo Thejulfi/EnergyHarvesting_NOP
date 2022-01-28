@@ -10,7 +10,7 @@ Notons que le préfix "E_" désigne des codes utilisés depuis le framework Ener
 
 ## Table des matières
 
-[1] : [Codes - ADC_Shunt_Remake](#adc_shunt_remake)  
+[1] : [Codes - ADC_Shunt](#adc_shunt)  
 
 [2] : [Codes - UART_Hello_world](#uart_hello_world)  
 
@@ -43,9 +43,13 @@ Notons que le préfix "E_" désigne des codes utilisés depuis le framework Ener
 
 ## Codes
 
-### ADC_Shunt_Remake
+### ADC_Shunt
 
 Code permettant de lire la tension sur le pin 1.2 (ADC). Il est utilisé pour lire la tension image du courant de l'interface shunt.
+
+### ADC_Shunt_voltage
+
+Code permettant de lire la tension aux bornes de la shunt et de la batterie de la super capa.
 
 ### UART_Hello_world
 
