@@ -294,18 +294,6 @@ void initGPIO_I2C()
     // previously configured port settings
 }
 
-/*void initButton(){
-
-    P1DIR &= ~BIT1;
-    P1REN |= BIT1;
-    P1OUT |= BIT1;
-    P1IES |= BIT1;
-
-
-    P1IFG &= ~BIT1;
-    P1IE |= BIT1;
-}*/
-
 void initClockTo16MHz()
 {
     // Configure one FRAM waitstate as required by the device datasheet for MCLK
@@ -369,7 +357,7 @@ void measurement(void){
 
     count ++;
 
-    toggle_led(); // Toggle LED1.0 to show that a data has been written in the FRAM
+    //toggle_led(); // Toggle LED1.0 to show that a data has been written in the FRAM
 }
 
 
@@ -400,9 +388,6 @@ int main(void) {
 
     // Enabling interruption every second
     init_timer_interrupt();
-
-
-//    initButton();
 
     // Endless loop waiting for interruption
     while(1){
@@ -567,5 +552,3 @@ void __attribute__ ((interrupt(TIMER0_B1_VECTOR))) TIMER0_B1_ISR (void)
     default: break;
   }
 }
-
-//comment for tristan

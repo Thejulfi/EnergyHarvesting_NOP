@@ -203,17 +203,6 @@ I2C_Mode I2C_Master_WriteReg(uint8_t dev_addr, uint8_t reg_addr, uint8_t *reg_da
 
     return MasterMode;
 }
-/*
-void CopyArray(uint8_t *source, uint8_t *dest, uint8_t count)
-{
-    uint8_t copyIndex = 0;
-    for (copyIndex = 0; copyIndex < count; copyIndex++)
-    {
-        dest[copyIndex] = source[copyIndex];
-    }
-}
-
-*/
 
 //******************************************************************************
 // Device Initialization *******************************************************
@@ -268,7 +257,7 @@ int main(void) {
     initGPIO();
     initI2C(SLAVE_ADDR_2);
 
-    I2C_Master_WriteReg(SLAVE_ADDR_2, ST_REG_1_MASTER, DefaultConfiguration, DefaultConfiguration_LENGTH);
+     I2C_Master_WriteReg(SLAVE_ADDR_2, ST_REG_1_MASTER, DefaultConfiguration, DefaultConfiguration_LENGTH);
 
     I2C_Master_ReadReg(SLAVE_ADDR_2, REG_RD_1_SLAVE, Slave_RD_LENGTH);
     Slave_out_z_l = ReceiveBuffer[0];

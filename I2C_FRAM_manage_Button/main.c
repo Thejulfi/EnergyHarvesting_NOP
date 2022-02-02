@@ -298,7 +298,7 @@ void initGPIO_I2C()
 void initButton(){
 
 
-    // Button P1.1 init
+    // Button P1.1 init - stop/start mesures
     P1DIR &= ~BIT1;
     P1REN |= BIT1;
     P1OUT |= BIT1;
@@ -308,7 +308,7 @@ void initButton(){
     P1IFG &= ~BIT1;
     P1IE |= BIT1;
 
-    // Button P4.5 init
+    // Button P4.5 init - reset de la FRAM
     P4DIR &= ~BIT5;
     P4REN |= BIT5;
     P4OUT |= BIT5;
@@ -384,7 +384,7 @@ void measurement(void){
 
     count ++;
 
-    //toggle_led(); // Toggle LED1.0 to show that a data has been written in the FRAM
+    toggle_led(); // Toggle LED1.0 to show that a data has been written in the FRAM
 }
 
 
@@ -557,7 +557,6 @@ void FRAMWrite(float data)
 //******************************************************************************
 // Timer interrupt *************************************************************
 //******************************************************************************
-
 #if defined(__TI_COMPILER_VERSION__) || defined(__IAR_SYSTEMS_ICC__)
 #pragma vector=TIMER0_B1_VECTOR
 __interrupt void TIMER0_B1_ISR(void)

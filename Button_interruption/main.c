@@ -24,8 +24,6 @@ void toggle_led(void){
 
 }
 
-
-
 /**
  * main.c
  */
@@ -39,7 +37,7 @@ int main(void)
 
     // Endless loop waiting for interruption
     while(1){
-        __bis_SR_register(LPM0_bits | GIE);         // Enter LPM0, enable interrupts
+        __bis_SR_register ( LPM0_bits | GIE ); // Enter LPM3 , enable interrupts
         __no_operation();                           // For debugger
     }
 
@@ -48,14 +46,5 @@ int main(void)
 }
 
 
-//******************************************************************************
-// Enable/disable measurements *************************************************
-//******************************************************************************
-#pragma vector = PORT1_VECTOR
-__interrupt void ISR_PORT1_S1(void)
-{
-  P1IFG &= ~BIT1; // disable interruption flag on button 1.1
 
-  toggle_led();
 
-}
