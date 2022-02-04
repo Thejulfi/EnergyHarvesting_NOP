@@ -61,8 +61,8 @@
 
 
 // The Slave ADdress (SAD) associated to the LIS3MDL is 00111x0b, whereas the x bit is modified by the SDO/SA1 pin in order to modify the device address.
-#define SLAVE_ADDR_1  0x1C // Slave address where x is at 0
-#define SLAVE_ADDR_2  0x1E // Slave address where x is at 1
+#define SLAVE_ADDR_1  0x1C              // Slave address where x is at 0
+#define SLAVE_ADDR_2  0x1E              // Slave address where x is at 1
 
 
 /* ST_REG_X_MASTER: numerical address of the first register to write in the slave.
@@ -72,19 +72,19 @@
  * TYPE_X_LENGTH: packets' length (in byte) to read or to write
  * */
 
-#define REG_RD_1_SLAVE      44 // OUT_X_L register address to read (0x28)
-#define REG_RD_2_SLAVE      45 // OUT_X_LH register address to read (0x29)
+#define REG_RD_1_SLAVE      44          // OUT_Z_L register address to read (0x2C)
+#define REG_RD_2_SLAVE      45          // OUT_Z_H register address to read (0x2D)
 
 
-#define ST_REG_1_MASTER      160 // CTRL_REG1 register to write first (0x20) with msb at "1" to enable address incrementation (for next CTRL_REGs)
+#define ST_REG_1_MASTER      160        // CTRL_REG1 register to write first (0x20) with msb at "1" to enable address incrementation (for next CTRL_REGs)
 
 #define DefaultConfiguration_LENGTH   5 // Write into CTRL_REG1..CTRL_REG5
-#define Slave_RD_LENGTH   1 // reading one byte in OUT_X_L & OUT_X_H
+#define Slave_RD_LENGTH   1             // reading one byte in OUT_X_L & OUT_X_H
 
-#define MAX_BUFFER_SIZE     20 // Maximum buffer size in reception and transmission
+#define MAX_BUFFER_SIZE     20          // Maximum buffer size in reception and transmission
 
 
-#define WRITE_SIZE 1000 // FRAM size of 1000
+#define WRITE_SIZE 1000                 // FRAM size of 1000
 
 
 /* DefaultConfiguration: configuration for CTRL_REG1..CTRL_REG5 (these are numerical values, not hexadecimal values)
