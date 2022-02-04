@@ -206,11 +206,11 @@ I2C_Mode I2C_Master_ReadReg(uint8_t dev_addr, uint8_t reg_addr, uint8_t count)
 
 
     /* Useful variables definition */
-    TransmitRegAddr = reg_addr; //resgiter to read addr
-    RXByteCtr = count; // number of bytes to read
-    TXByteCtr = 0; // Number of bytes to transmit (0 here mean there is no bytes to transmit except "reg_addr").
-    ReceiveIndex = 0; // Init receive index
-    TransmitIndex = 0; // Init transmit index
+    TransmitRegAddr = reg_addr;                     //resgiter to read addr
+    RXByteCtr = count;                              // number of bytes to read
+    TXByteCtr = 0;                                  // Number of bytes to transmit (0 here mean there is no bytes to transmit except "reg_addr").
+    ReceiveIndex = 0;                               // Init receive index
+    TransmitIndex = 0;                              // Init transmit index
 
     /* Initialize slave address and interrupts */
     UCB0I2CSA = dev_addr;
